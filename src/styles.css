@@ -1,0 +1,159 @@
+body {
+    background-color: #2D1447;
+    background: linear-gradient(135deg, #3F338E 0%, #1C206B 100%);
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+}
+
+body.has-control {
+    background-color: #0B1659;
+    background: linear-gradient(135deg, #0B1659 0%, #113174 100%);
+}
+
+body.controlled {
+    background-color: #29697F;
+    background: linear-gradient(135deg, #29697F 0%, #283A62 100%);
+}
+
+body.controlled .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1055;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+}
+
+body > main {
+    display: flex;
+    flex-wrap: nowrap;
+    height: 100vh;
+    height: -webkit-fill-available;
+    max-height: 100vh;
+    height: 100vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+#btn-settings {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+#btn-settings img {
+    height: 25px;
+}
+
+#dolbyio-logo {
+    position: absolute;
+    top: 120px;
+    right: 180px;
+    height: 50px;
+}
+
+.background-border-container-a,
+.background-border-container-b {
+    border-radius: 30px;
+    position: absolute;
+}
+
+.background-border-container-a {
+    border: 5px solid #863FD6;
+    top: 40px;
+    right: 100px;
+    bottom: 80px;
+    left: 140px;
+}
+
+.background-border-container-b {
+    border: 5px solid #9f68dd;
+    top: 80px;
+    right: 140px;
+    bottom: 40px;
+    left: 100px;
+}
+
+.main-container {
+    width: 100%;
+    margin: 85px 145px;
+}
+
+.user-container {
+    position: absolute;
+}
+
+.video-container {
+    padding: 8px;
+    border: 1px solid white;
+    width: 160px;
+    height: 160px;
+    border-radius: 50% !important;
+
+    -webkit-transition: background-color 250ms linear;
+    -moz-transition: background-color 250ms linear;
+    -o-transition: background-color 250ms linear;
+    transition: background-color 250ms linear;
+
+    background-color: rgba(255,255,255,0.2);
+}
+
+.user-container.is-speaking .video-container.blue {
+    background-color: rgba(132, 214, 250, 0.5);
+}
+
+.user-container.is-speaking .video-container.red {
+    background-color: rgba(202, 70, 160, 0.6);
+}
+
+.user-container.is-speaking .video-container.green {
+    background-color: rgba(0, 127, 70, 0.6);
+}
+
+.user-container.ui-draggable-dragging .video-container {
+    -webkit-transition: width 250ms linear, height 250ms linear;
+    -moz-transition: width 250ms linear, height 250ms linear;
+    -o-transition: width 250ms linear, height 250ms linear;
+    transition: width 250ms linear, height 250ms linear;
+
+    width: 180px;
+    height: 180px;
+
+    -webkit-box-shadow: 20px 40px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: 20px 40px rgba(0, 0, 0, 0.25);
+    -o-box-shadow: 20px 40px rgba(0, 0, 0, 0.25);
+    box-shadow: 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+.video-container video {
+    border-radius: 50% !important;
+    object-fit: cover;
+    background-color: #14141A;
+    width: 100%;
+    height: 100%;
+}
+
+.video-container img {
+    border-radius: 50% !important;
+    height: 100%;
+}
+
+.participant-name {
+    color: rgba(255,255,255,0.7);
+    margin: 5px 0;
+}
+
+.toast .bd-placeholder-img {
+    width: 20px;
+    height: 20px;
+    background-color: #FA02B3;
+    background: linear-gradient(135deg, #FA02B3 0%, #7C0DEC 70%, #930BE3 100%);
+}
+
+.toast img.avatar {
+    width: 30px;
+    height: 30px;
+}

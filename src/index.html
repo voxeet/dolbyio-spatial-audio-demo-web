@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Dolby.io Spatial Audio</title>
+    <link rel="manifest" href="manifest.json" />
+    <script type="text/javascript" src="https://unpkg.com/@voxeet/voxeet-web-sdk@3.4.0-beta.1/dist/voxeet-sdk.js"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.2/css/bootstrap.min.css"
+        integrity="sha512-SCpMC7NhtrwHpzwKlE1l6ks0rS+GbMJJpoQw/A742VaxdGcQKqVD8F/y/m9WLOfIPppy7mWIs/kS0bKgSI0Bfw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer" />
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
+        integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer" />
+    <link rel="stylesheet"
+        href="styles.css">
+</head>
+
+<body>
+    <main>
+        <div class="background-border-container-a"></div>
+        <div class="background-border-container-b"></div>
+        <img id="dolbyio-logo" src="images/dolbyio-logo.png" />
+        <div id="users-container" class="main-container"></div>
+    </main>
+
+    <div class="overlay"></div>
+
+    <button id="btn-settings" class="btn btn-light btn-sm visually-hidden" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+        <img src="images/settings.png" />
+    </button>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasRightLabel">Conference Settings</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="d-grid gap-2">
+                <button id="btn-video-on" type="button" class="btn btn-primary d-none">Video On</button>
+                <button id="btn-video-off" type="button" class="btn btn-secondary d-none">Video Off</button>
+                <button id="btn-unmute" type="button" class="btn btn-primary d-none">Unmute</button>
+                <button id="btn-mute" type="button" class="btn btn-secondary d-none">Mute</button>
+                <button id="btn-take-control" type="button" class="btn btn-primary">Take Control</button>
+                <button id="btn-release-control" type="button" class="btn btn-secondary d-none">Release Control</button>
+            </div>
+
+            <!-- Video Devices -->
+            <div class="d-grid gap-2 border-top mt-3">
+                <label for="video-devices" class="col-form-label">Video Devices:</label>
+                <select id="video-devices" class="custom-select"></select>
+                <button id="btn-set-video-device" class="btn btn-info" type="button" disabled>Set</button>
+            </div>
+    
+            <!-- Input Audio Devices -->
+            <div class="d-grid gap-2 border-top mt-3">
+                <label for="input-audio-devices" class="col-form-label">Input Audio Devices:</label>
+                <select id="input-audio-devices" class="custom-select"></select>
+                <button id="btn-set-input-audio-device" class="btn btn-info" type="button" disabled>Set</button>
+            </div>
+    
+            <!-- Output Audio Devices -->
+            <div class="d-grid gap-2 border-top mt-3">
+                <label for="output-audio-devices" class="col-form-label">Output Audio Devices:</label>
+                <select id="output-audio-devices" class="custom-select"></select>
+                <button id="btn-set-output-audio-device" class="btn btn-info" type="button" disabled>Set</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="login-modal" class="modal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Dolby.io Spatial Audio</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="input-conference-alias" class="form-label">Join the conference:</label>
+                        <input id="input-conference-alias" type="text" class="form-control" placeholder="Conference alias" value="fabien">
+                    </div>
+                    <div class="mb-3">
+                        <label for="input-username" class="form-label">Your name:</label>
+                        <input id="input-username" type="text" class="form-control" placeholder="Your name">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-join" type="button" class="btn btn-primary">Join</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toasts" class="toast-container position-absolute p-3 top-0 end-0"></div>
+
+    <script id="user-template" type="text/x-jsrender">
+        <div id="user-{{:participantId}}-container" class="user-container">
+            <div class="text-center video-container {{:color}}">
+                <img src="{{:avatarUrl}}">
+            </div>
+            <p class="text-center participant-name">{{:name}}</p>
+        </div>
+    </script>
+
+    <script id="toast-template" type="text/x-jsrender">
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <div class="bd-placeholder-img rounded me-2"></div>
+                <strong class="me-auto">{{:title}}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">{{:message}}</div>
+        </div>
+    </script>
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"
+        integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.2/js/bootstrap.min.js"
+        integrity="sha512-HSNvqjhsAxRPvbSBEdXWlkR9uYmJtUvXEyfAvUzlA0uS5SyFZMZdczgz8oPWTz2NUEBaXkIYL4kdrBJkP66jYA=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/1.0.11/jsrender.min.js"
+        integrity="sha512-bKlNlbTH3duwZ28zoqEhXui/yuaPuQVci6OAVu0zh2WfYbEKD39HszVR8byP4/L4YyBo3b5CGIY+4ldVN93uCg=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="scripts/utils.js"></script>
+    <script type="text/javascript" src="scripts/actions.js"></script>
+    <script type="text/javascript" src="scripts/videos.js"></script>
+    <script type="text/javascript" src="scripts/controls.js"></script>
+    <script type="text/javascript" src="scripts/script.js"></script>
+</body>
+</html>
