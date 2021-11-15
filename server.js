@@ -114,7 +114,7 @@ if (options.port) {
 }
 
 // Starts an HTTP server
-const server = app.listen(portNumber, function () {
+const server = app.listen(portNumber,'localhost', function () {
     const address = server.address();
     console.log('Dolby.io Spatial Audio application is now listening at http://%s:%s', address.address, address.port);
 });
