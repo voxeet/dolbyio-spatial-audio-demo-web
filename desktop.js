@@ -23,7 +23,7 @@ async function askForMediaAccess(media) {
         if (process.platform !== "darwin") {
             return true;
         }
-        const status = await systemPreferences.getMediaAccessStatus(media);
+        const status = systemPreferences.getMediaAccessStatus(media);
         console.log(`Current ${media} access status:`, status);
 
         if (status !== "granted") {
@@ -159,7 +159,7 @@ app.whenReady().then(async () => {
     ipcMain.on('speakersLoaded', (_, devices) => addDevices(devices, 'speakers', 'speakerSelected'));
     ipcMain.on('camerasLoaded', (_, devices) => addDevices(devices, 'cameras', 'cameraSelected'));
 
-    ipcMain.on('conferenceJoined', (e) => {
+    ipcMain.on('conferenceJoined', () => {
         try {
             powerId = powerSaveBlocker.start('prevent-display-sleep');
         } catch (e) {
@@ -167,7 +167,7 @@ app.whenReady().then(async () => {
         }
     });
 
-    ipcMain.on('conferenceLeft', (e) => {
+    ipcMain.on('conferenceLeft', () => {
         try {
             if (powerId !== null) {
                 powerSaveBlocker.stop(powerId);
