@@ -71,6 +71,7 @@ This sample application is using the following Open Source projects:
 - [Bootstrap](https://getbootstrap.com)
 - [JsRender](https://www.jsviews.com/)
 - [JQuery](https://jquery.com)
+- [JQuery UI Touch Punch](https://github.com/furf/jquery-ui-touch-punch)
 - [Express](https://expressjs.com/)
 
 ## Avatar images
