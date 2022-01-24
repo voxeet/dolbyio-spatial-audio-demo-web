@@ -59,7 +59,8 @@
     "express": "^4.17.1"
   },
   "dependencies": {
-    "@dolbyio/dolbyio-rest-apis-client": "^0.1.0-beta.2",
-    "@dolbyio/native-desktop-sdk": "^1.0.0"
+    "@dolbyio/dolbyio-rest-apis-client": "^1.0.0",
+    "@dolbyio/native-desktop-sdk": "^1.0.0",
+    "reverse-sourcemap": "^1.0.4"
   }
 }

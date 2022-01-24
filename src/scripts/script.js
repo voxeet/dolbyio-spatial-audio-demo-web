@@ -39,6 +39,41 @@ VoxeetSDK.conference.on('participantUpdated', (participant) => {
     }
 });
 
+const isEmptyPosition = (top, left, height, width) => {
+    const elements = document.getElementsByClassName('user-container');
+    for (let index = 0; index < elements.length; index++) {
+        const rect = elements[index].getBoundingClientRect();
+
+        if (top >= (rect.top - height) && (top + height) <= (rect.top + rect.height)) return false;
+        if (left >= (rect.left - width) && (left + width) <= (rect.left + rect.width)) return false;
+    }
+
+    return true;
+};
+
+const getEmptyPosition = (height, width) => {
+    const usersContainer = document.getElementById('users-container').getBoundingClientRect();
+
+    const xMin = usersContainer.left;
+    const xMax = usersContainer.left + usersContainer.width - width;
+    const yMin = usersContainer.top;
+    const yMax = usersContainer.top + usersContainer.height - height;
+
+    var top = 0;
+    var left = 0;
+
+    for (let index = 0; index < 10; index++) {
+        left = xMin + Math.floor(Math.random() * (xMax - xMin));
+        top = yMin + Math.floor(Math.random() * (yMax - yMin));
+        
+        if (isEmptyPosition(top, left, height, width)) {
+            break;
+        }
+    }
+
+    return { top, left };
+};
+
 /**
  * Adds a participant to the layout.
  * @param participant Participant object.
@@ -55,10 +90,8 @@ const addParticipant = (participant) => {
     $('#users-container').append(element);
     const clientRect = element[0].getBoundingClientRect();
 
-    // TODO: Find an empty space in the canvas
-    const top = (window.innerHeight - clientRect.height ) / 2;
-    const left = (window.innerWidth - clientRect.width ) / 2;
-    element.attr('style', `top: ${top}px; left: ${left}px;`);
+    const position = getEmptyPosition(clientRect.height, clientRect.width)
+    element.attr('style', `top: ${position.top}px; left: ${position.left}px;`);
 
     // Allow to drag & drop the element
     element.draggable({
@@ -75,10 +108,10 @@ const addParticipant = (participant) => {
  * Set the spatial scene.
  */
 const setSpatialEnvironment = () => {
-    const right   = { x: 1, y: 0,  z: 0 };
+    const scale   = { x: window.innerWidth / 1, y: window.innerHeight / 1, z: 1 };
     const forward = { x: 0, y: -1, z: 0 };
     const up      = { x: 0, y: 0,  z: 1 };
-    const scale   = { x: window.innerWidth / 1, y: window.innerHeight / 1, z: 1 };
+    const right   = { x: 1, y: 0,  z: 0 };
 
     VoxeetSDK.conference.setSpatialEnvironment(scale, forward, up, right);
 };
