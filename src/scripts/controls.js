@@ -32,7 +32,17 @@ const animateParticipantPosition = (layout, participantId, position) => {
     console.log(`Animate participant ${participantId} to top ${top} left ${left}`);
 
     $(`#user-${participantId}-container`)
-        .animate({ top: `${top}px`, left: `${left}px` }, 500, () => setSpatialPosition(participantId));
+        .animate({
+                top: `${top}px`,
+                left: `${left}px`
+            }, {
+                duration: 500,
+                complete: () => {
+                    const participant = VoxeetSDK.conference.participants.get(participantId);
+                    setSpatialPosition(participant);
+                }
+            }
+        );
 };
 
 /**
