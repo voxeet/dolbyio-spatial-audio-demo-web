@@ -1,9 +1,3 @@
-if (window.electron) {
-    // Inform the Electron process
-    VoxeetSDK.conference.on("joined", () => window.electron.electronOnJoined());
-    VoxeetSDK.conference.on("left", () => window.electron.electronOnLeft());
-}
-
 VoxeetSDK.conference.on('participantAdded', (participant) => {
     // Only add connected participants
     if (!isConnected(participant)) return;
@@ -185,7 +179,7 @@ const onWindowResize = () => {
     }, 1000);
 };
 
-$('#btn-join').click(async () => {
+const createAndJoinConference = async (isDemo) => {
     try {
         var name = $('#input-username').val();
         const avatarUrl = getRandomAvatar();
@@ -199,30 +193,7 @@ $('#btn-join').click(async () => {
         console.groupEnd();
 
         // Hide the modal popup
-        const modalElement = document.getElementById('login-modal');
-        const bootstrapModal = bootstrap.Modal.getInstance(modalElement);
-        bootstrapModal.hide();
-
-        // See: https://docs.dolby.io/communications-apis/docs/js-client-sdk-model-conferenceoptions
-        const conferenceOptions = {
-            alias: $('#input-conference-alias').val(),
-            // See: https://docs.dolby.io/communications-apis/docs/js-client-sdk-model-conferenceparameters
-            params: {
-                liveRecording: false,
-                rtcpMode: "average", // worst, average, max
-                ttl: 0,
-                videoCodec: "H264", // H264, VP8
-                dolbyVoice: true
-            }
-        };
-
-        // Create the conference
-        const conference = await VoxeetSDK.conference.create(conferenceOptions);
-
-        console.group('Conference created');
-        console.log(`Id:    ${conference.id}`);
-        console.log(`Alias: ${conference.alias}`);
-        console.groupEnd();
+        hideModal('login-modal');
 
         // https://docs.dolby.io/communications-apis/docs/js-client-sdk-model-joinoptions
         const joinOptions = {
@@ -235,8 +206,34 @@ $('#btn-join').click(async () => {
             spatialAudio: true // Turn on Spatial Audio
         };
 
-        // Join the conference
-        await VoxeetSDK.conference.join(conference, joinOptions);
+        if (isDemo) {
+            // Join a demo conference
+            await VoxeetSDK.conference.demo(joinOptions);
+        } else {
+            // See: https://docs.dolby.io/communications-apis/docs/js-client-sdk-model-conferenceoptions
+            const conferenceOptions = {
+                alias: $('#input-conference-alias').val(),
+                // See: https://docs.dolby.io/communications-apis/docs/js-client-sdk-model-conferenceparameters
+                params: {
+                    liveRecording: false,
+                    rtcpMode: "average", // worst, average, max
+                    ttl: 0,
+                    videoCodec: "H264", // H264, VP8
+                    dolbyVoice: true
+                }
+            };
+
+            // Create the conference
+            const conference = await VoxeetSDK.conference.create(conferenceOptions);
+
+            console.group('Conference created');
+            console.log(`Id:    ${conference.id}`);
+            console.log(`Alias: ${conference.alias}`);
+            console.groupEnd();
+            
+            // Join the conference
+            await VoxeetSDK.conference.join(conference, joinOptions);
+        }
 
         // Set the spatial audio scene
         setSpatialEnvironment();
@@ -249,47 +246,61 @@ $('#btn-join').click(async () => {
         // to add a visual indication on the UI
         listenIsSpeaking();
 
-        if (!window.electron) {
-            // Display the actions buttons
-            $(joinOptions.constraints.audio ? '#btn-mute' : '#btn-unmute').removeClass('d-none');
-            $(joinOptions.constraints.video ? '#btn-video-off' : '#btn-video-on').removeClass('d-none');
-
-            // Display the setting button on web browsers
-            $('#btn-settings').removeClass('visually-hidden');
-        }
+        // Display the actions buttons
+        $(joinOptions.constraints.audio ? '#btn-mute' : '#btn-unmute').removeClass('d-none');
+        $(joinOptions.constraints.video ? '#btn-video-off' : '#btn-video-on').removeClass('d-none');
 
         window.addEventListener('resize', onWindowResize);
     } catch (error) {
         console.error(error);
     }
-});
-
-/**
- * Requests an access token from the server.
- * @returns Access token.
- */
-const getAccessToken = async () => {
-    const url = 'http://localhost:8081/access-token';
-    const response = await fetch(url);
-    const jwt = await response.json();
-    return jwt.access_token;
 };
 
+$('#btn-demo').click(async () => {
+    await createAndJoinConference(true);
+});
+
+$('#btn-join').click(async () => {
+    await createAndJoinConference(false);
+});
+
+$('#btn-initialize').click(() => {
+    var key = $('#input-consumer-key').val();
+    var secret = $('#input-consumer-secret').val();
+
+    VoxeetSDK.initialize(key, secret);
+
+    hideModal('init-modal');
+
+    displayModal('login-modal');
+});
+
+const displayModal = (elementId) => {
+    const modalElement = document.getElementById(elementId);
+    const bootstrapModal = new bootstrap.Modal(modalElement, {
+        backdrop: 'static',
+        keyboard: false,
+        focus: true
+    });
+    bootstrapModal.show();
+}
+
+const hideModal = (elementId) => {
+    const modalElement = document.getElementById(elementId);
+    const bootstrapModal = bootstrap.Modal.getInstance(modalElement);
+    bootstrapModal.hide();
+}
+
 $(function() {
-    getAccessToken()
-        // Initialize the SDK
-        .then(accessToken => VoxeetSDK.initializeToken(accessToken, getAccessToken))
-        .then(() => {
-            // Display a modal box to prompt for a username and a conference alias
-            const modalElement = document.getElementById('login-modal');
-            const bootstrapModal = new bootstrap.Modal(modalElement, {
-                backdrop: 'static',
-                keyboard: false,
-                focus: true
-            });
-            bootstrapModal.show();
-        })
-        .catch((error) => console.error(error));
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    if (token) {
+        console.log(`Initialize the SDK with the Access Token: ${token}`);
+        VoxeetSDK.initializeToken(token, () => token);
+        displayModal('login-modal');
+    } else {
+        displayModal('init-modal');
+    }
 
     documentHeight = document.documentElement.clientHeight;
     documentWidth = document.documentElement.clientWidth;
