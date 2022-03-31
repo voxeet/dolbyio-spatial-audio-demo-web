@@ -76,4 +76,4 @@ This sample application is using the following Open Source projects:
 
 ## Avatar images
 
-The avatar images are made by [photo3idea_studio](https://www.flaticon.com/authors/photo3idea-studio) and [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/).
+The avatar images are made by [photo3idea_studio](https://www.flaticon.com/authors/photo3idea-studio), [Freepik](https://www.freepik.com), and [Micro icons](https://www.flaticon.com/free-icons/micro) from [www.flaticon.com](https://www.flaticon.com/).

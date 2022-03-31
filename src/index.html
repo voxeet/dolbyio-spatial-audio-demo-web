@@ -72,6 +72,30 @@
         </div>
     </div>
 
+    <div id="init-modal" class="modal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Dolby.io Spatial Audio</h5>
+                    Initialize the SDK
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="input-consumer-key" class="form-label">Dolby.io Consumer Key:</label>
+                        <input id="input-consumer-key" type="text" class="form-control" placeholder="Consumer Key" value="5usQZOOEhFkdrg9EO7ZnIw==">
+                    </div>
+                    <div class="mb-3">
+                        <label for="input-consumer-secret" class="form-label">Dolby.io Consumer Secret:</label>
+                        <input id="input-consumer-secret" type="text" class="form-control" placeholder="Consumer Secret" value="kWvb3wxtdQwNhYjxloRj7sqpLNHaZlMuH9J5e7oISRo=">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-initialize" type="button" class="btn btn-primary">Initialize the SDK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="login-modal" class="modal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -79,17 +103,34 @@
                     <h5 class="modal-title">Dolby.io Spatial Audio</h5>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="input-conference-alias" class="form-label">Join the conference:</label>
-                        <input id="input-conference-alias" type="text" class="form-control" placeholder="Conference alias" value="fabien">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3">
+                                    Experience the Spatial Audio demo with a wired headset
+                                </div>
+                                <div class="mb-3" style="text-align: center;">
+                                    <img src="images/earphone.png" style="height: 96px;">
+                                </div>
+                                <div class="mb-3 d-grid">
+                                    <button id="btn-demo" type="button" class="btn btn-primary">Demo</button>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label for="input-conference-alias" class="form-label">or join the conference:</label>
+                                    <input id="input-conference-alias" type="text" class="form-control" placeholder="Conference alias" value="fabien">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="input-username" class="form-label">Your name:</label>
+                                    <input id="input-username" type="text" class="form-control" placeholder="Your name">
+                                </div>
+                                <div class="mb-3 d-grid">
+                                    <button id="btn-join" type="button" class="btn btn-primary">Join</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="input-username" class="form-label">Your name:</label>
-                        <input id="input-username" type="text" class="form-control" placeholder="Your name">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button id="btn-join" type="button" class="btn btn-primary">Join</button>
                 </div>
             </div>
         </div>
