@@ -30,44 +30,49 @@
 
     <div class="overlay"></div>
 
-    <button id="btn-settings" class="btn btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
-        <img src="images/settings.png" />
-    </button>
+        <button id="btn-settings" class="btn btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+            <img src="images/settings.png" />
+        </button>
 
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-        <div class="offcanvas-header">
-            <h5 id="offcanvasRightLabel">Conference Settings</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <div class="d-grid gap-2">
-                <button id="btn-video-on" type="button" class="btn btn-primary d-none">Video On</button>
-                <button id="btn-video-off" type="button" class="btn btn-secondary d-none">Video Off</button>
-                <button id="btn-unmute" type="button" class="btn btn-primary d-none">Unmute</button>
-                <button id="btn-mute" type="button" class="btn btn-secondary d-none">Mute</button>
-                <button id="btn-take-control" type="button" class="btn btn-primary">Take Control</button>
-                <button id="btn-release-control" type="button" class="btn btn-secondary d-none">Release Control</button>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+            <div class="offcanvas-header">
+                <h5 id="offcanvasRightLabel">Dolby.io Spatial Audio</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
+            <div class="offcanvas-body">
+                <div class="d-grid gap-2 hide-demo">
+                    <button id="btn-video-on" type="button" class="btn btn-primary d-none">Video On</button>
+                    <button id="btn-video-off" type="button" class="btn btn-secondary d-none">Video Off</button>
+                    <button id="btn-unmute" type="button" class="btn btn-primary d-none">Unmute</button>
+                    <button id="btn-mute" type="button" class="btn btn-secondary d-none">Mute</button>
+                    <button id="btn-take-control" type="button" class="btn btn-primary">Take Control</button>
+                    <button id="btn-release-control" type="button" class="btn btn-secondary d-none">Release Control</button>
+                </div>
 
-            <!-- Video Devices -->
-            <div class="d-grid gap-2 border-top mt-3">
-                <label for="video-devices" class="col-form-label">Video Devices:</label>
-                <select id="video-devices" class="custom-select"></select>
-                <button id="btn-set-video-device" class="btn btn-info" type="button" disabled>Set</button>
-            </div>
-    
-            <!-- Input Audio Devices -->
-            <div class="d-grid gap-2 border-top mt-3">
-                <label for="input-audio-devices" class="col-form-label">Input Audio Devices:</label>
-                <select id="input-audio-devices" class="custom-select"></select>
-                <button id="btn-set-input-audio-device" class="btn btn-info" type="button" disabled>Set</button>
-            </div>
-    
-            <!-- Output Audio Devices -->
-            <div class="d-grid gap-2 border-top mt-3">
-                <label for="output-audio-devices" class="col-form-label">Output Audio Devices:</label>
-                <select id="output-audio-devices" class="custom-select"></select>
-                <button id="btn-set-output-audio-device" class="btn btn-info" type="button" disabled>Set</button>
+                <div class="d-grid gap-2 border-top mt-3">
+                    <button id="btn-exit" type="button" class="btn btn-danger">Exit</button>
+                </div>
+
+                <!-- Video Devices -->
+                <div class="d-grid gap-2 border-top mt-3 hide-demo">
+                    <label for="video-devices" class="col-form-label">Video Devices:</label>
+                    <select id="video-devices" class="custom-select"></select>
+                    <button id="btn-set-video-device" class="btn btn-info" type="button" disabled>Set</button>
+                </div>
+        
+                <!-- Input Audio Devices -->
+                <div class="d-grid gap-2 border-top mt-3 hide-demo">
+                    <label for="input-audio-devices" class="col-form-label">Input Audio Devices:</label>
+                    <select id="input-audio-devices" class="custom-select"></select>
+                    <button id="btn-set-input-audio-device" class="btn btn-info" type="button" disabled>Set</button>
+                </div>
+        
+                <!-- Output Audio Devices -->
+                <div class="d-grid gap-2 border-top mt-3 hide-demo">
+                    <label for="output-audio-devices" class="col-form-label">Output Audio Devices:</label>
+                    <select id="output-audio-devices" class="custom-select"></select>
+                    <button id="btn-set-output-audio-device" class="btn btn-info" type="button" disabled>Set</button>
+                </div>
             </div>
         </div>
     </div>

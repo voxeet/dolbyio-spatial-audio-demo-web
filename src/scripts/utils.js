@@ -82,11 +82,13 @@ const loadAudioVideoDevices = async () => {
     }
 };
 
+var listenIsSpeakingIntervalId;
+
 /**
  * Add a graphical element to indicate when a user is speaking.
  */
 const listenIsSpeaking = () => {
-    setInterval(() => {
+    listenIsSpeakingIntervalId = setInterval(() => {
         [...VoxeetSDK.conference.participants].map((val) => {
             const participant = val[1];
             VoxeetSDK.conference.isSpeaking(participant, (isSpeaking) => {
@@ -101,6 +103,10 @@ const listenIsSpeaking = () => {
             });
         });
     }, 500);
+};
+
+const stopListenIsSpeaking = () => {
+    clearInterval(listenIsSpeakingIntervalId);
 };
 
 /**
