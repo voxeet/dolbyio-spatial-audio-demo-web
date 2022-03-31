@@ -1,9 +1,3 @@
-if (window.electron) {
-    // Inform the Electron process
-    VoxeetSDK.conference.on("joined", () => window.electron.electronOnJoined());
-    VoxeetSDK.conference.on("left", () => window.electron.electronOnLeft());
-}
-
 VoxeetSDK.conference.on('participantAdded', (participant) => {
     // Only add connected participants
     if (!isConnected(participant)) return;
@@ -252,14 +246,9 @@ const createAndJoinConference = async (isDemo) => {
         // to add a visual indication on the UI
         listenIsSpeaking();
 
-        if (!window.electron) {
-            // Display the actions buttons
-            $(joinOptions.constraints.audio ? '#btn-mute' : '#btn-unmute').removeClass('d-none');
-            $(joinOptions.constraints.video ? '#btn-video-off' : '#btn-video-on').removeClass('d-none');
-
-            // Display the setting button on web browsers
-            $('#btn-settings').removeClass('visually-hidden');
-        }
+        // Display the actions buttons
+        $(joinOptions.constraints.audio ? '#btn-mute' : '#btn-unmute').removeClass('d-none');
+        $(joinOptions.constraints.video ? '#btn-video-off' : '#btn-video-on').removeClass('d-none');
 
         window.addEventListener('resize', onWindowResize);
     } catch (error) {

@@ -77,13 +77,6 @@ const loadAudioVideoDevices = async () => {
         });
 
         $('#btn-set-video-device').attr('disabled', false);
-
-        // Inform the Electron process
-        if (window.electron) {
-            window.electron.electronOnSpeakersLoaded(audioOutput2);
-            window.electron.electronOnMicrophonesLoaded(audioInput2);
-            window.electron.electronOnCamerasLoaded(videoInput2);
-        }
     } catch (error) {
         console.error(error);
     }

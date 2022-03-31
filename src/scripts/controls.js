@@ -131,11 +131,5 @@ const releaseControl = async () => {
     onReleaseControl();
 };
 
-
-if (window.electron) {
-    window.electron.receive('actionTakeControl', async () => await takeControl());
-    window.electron.receive('actionReleaseControl', async () => await releaseControl());
-} else {
-    $('#btn-take-control').click(async () => await takeControl());
-    $('#btn-release-control').click(async () => await releaseControl());
-}
+$('#btn-take-control').click(async () => await takeControl());
+$('#btn-release-control').click(async () => await releaseControl());

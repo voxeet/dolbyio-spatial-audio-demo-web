@@ -69,35 +69,19 @@ const selectAudioOutput = async (deviceId) => {
     }
 };
 
-if (window.electron) {
-    window.electron.receive('actionVideoOn', async () => await startVideo());
-    window.electron.receive('actionVideoOff', async () => await stopVideo());
-    window.electron.receive('actionMute', () => mute());
-    window.electron.receive('actionUnmute', () => unmute());
-    window.electron.receive('microphoneSelected', async (deviceId) => {
-        await VoxeetSDK.mediaDevice.selectAudioInput(deviceId);
-    });
-    window.electron.receive('speakerSelected', async (deviceId) => {
-        await VoxeetSDK.mediaDevice.selectAudioOutput(deviceId);
-    });
-    window.electron.receive('cameraSelected', async (deviceId) => {
-        await VoxeetSDK.mediaDevice.selectVideoInput(deviceId);
-    });
-} else {
-    document.getElementById('btn-video-on').addEventListener('click', async () => await startVideo());
-    document.getElementById('btn-video-off').addEventListener('click', async () => await stopVideo());
-    document.getElementById('btn-unmute').addEventListener('click', () => unmute());
-    document.getElementById('btn-mute').addEventListener('click', () => mute());
-    document.getElementById('btn-set-video-device').addEventListener('click', async () => {
-        const deviceId = document.getElementById('video-devices').value;
-        await selectVideoInput(deviceId);
-    });
-    document.getElementById('btn-set-input-audio-device').addEventListener('click', async () => {
-        const deviceId = document.getElementById('input-audio-devices').value;
-        await selectAudioInput(deviceId);
-    });
-    document.getElementById('btn-set-output-audio-device').addEventListener('click', async () => {
-        const deviceId = document.getElementById('output-audio-devices').value;
-        await selectAudioOutput(deviceId);
-    });
-}
+document.getElementById('btn-video-on').addEventListener('click', async () => await startVideo());
+document.getElementById('btn-video-off').addEventListener('click', async () => await stopVideo());
+document.getElementById('btn-unmute').addEventListener('click', () => unmute());
+document.getElementById('btn-mute').addEventListener('click', () => mute());
+document.getElementById('btn-set-video-device').addEventListener('click', async () => {
+    const deviceId = document.getElementById('video-devices').value;
+    await selectVideoInput(deviceId);
+});
+document.getElementById('btn-set-input-audio-device').addEventListener('click', async () => {
+    const deviceId = document.getElementById('input-audio-devices').value;
+    await selectAudioInput(deviceId);
+});
+document.getElementById('btn-set-output-audio-device').addEventListener('click', async () => {
+    const deviceId = document.getElementById('output-audio-devices').value;
+    await selectAudioOutput(deviceId);
+});
