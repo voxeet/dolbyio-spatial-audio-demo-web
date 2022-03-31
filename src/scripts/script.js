@@ -33,6 +33,16 @@ VoxeetSDK.conference.on('participantUpdated', (participant) => {
     }
 });
 
+VoxeetSDK.conference.on("left", async () => {
+    $('#users-container').empty();
+
+    // Close the session
+    await VoxeetSDK.session.close();
+
+    // Display the login modal
+    displayModal('login-modal');
+});
+
 const isEmptyPosition = (top, left, height, width) => {
     const elements = document.getElementsByClassName('user-container');
     for (let index = 0; index < elements.length; index++) {
@@ -247,8 +257,15 @@ const createAndJoinConference = async (isDemo) => {
         listenIsSpeaking();
 
         // Display the actions buttons
-        $(joinOptions.constraints.audio ? '#btn-mute' : '#btn-unmute').removeClass('d-none');
-        $(joinOptions.constraints.video ? '#btn-video-off' : '#btn-video-on').removeClass('d-none');
+        if (isDemo) {
+            $('.hide-demo').addClass('d-none');
+        } else {
+            $('.hide-demo').removeClass('d-none');
+            $(joinOptions.constraints.audio ? '#btn-mute' : '#btn-unmute').removeClass('d-none');
+            $(joinOptions.constraints.audio ? '#btn-unmute' : '#btn-mute').addClass('d-none');
+            $(joinOptions.constraints.video ? '#btn-video-off' : '#btn-video-on').removeClass('d-none');
+            $(joinOptions.constraints.video ? '#btn-video-on' : '#btn-video-off').addClass('d-none');
+        }
 
         window.addEventListener('resize', onWindowResize);
     } catch (error) {
@@ -262,6 +279,15 @@ $('#btn-demo').click(async () => {
 
 $('#btn-join').click(async () => {
     await createAndJoinConference(false);
+});
+
+$('#btn-exit').click(async () => {
+    stopListenIsSpeaking();
+
+    await VoxeetSDK.conference.leave();
+
+    $('#offcanvasRight').removeClass('show');
+    $('.offcanvas-backdrop').remove();
 });
 
 $('#btn-initialize').click(() => {
@@ -296,7 +322,7 @@ $(function() {
     const token = urlParams.get('token');
     if (token) {
         console.log(`Initialize the SDK with the Access Token: ${token}`);
-        VoxeetSDK.initializeToken(token, () => token);
+        VoxeetSDK.initializeToken(token, () => new Promise((resolve) => resolve(token)));
         displayModal('login-modal');
     } else {
         displayModal('init-modal');
