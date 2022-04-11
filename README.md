@@ -1,6 +1,6 @@
 # Communications APIs - Spatial Audio for Web SDK
 
-This sample application allows you to demonstrate how Spatial Audio works. You can run the application on either web or Desktop.
+This sample application allows you to demonstrate how Spatial Audio works.
 
 ![](wiki/layout.png)
 
