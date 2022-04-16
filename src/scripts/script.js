@@ -189,6 +189,8 @@ const onWindowResize = () => {
     }, 1000);
 };
 
+var isConferenceProtected = false;
+
 const createAndJoinConference = async (isDemo) => {
     try {
         var name = $('#input-username').val();
@@ -235,6 +237,9 @@ const createAndJoinConference = async (isDemo) => {
 
             // Create the conference
             const conference = await VoxeetSDK.conference.create(conferenceOptions);
+
+            // If the conference is protected then the permissions set is empty
+            isConferenceProtected = conference.permissions && conference.permissions.size <= 0;
 
             console.group('Conference created');
             console.log(`Id:    ${conference.id}`);
@@ -292,6 +297,11 @@ $('#btn-exit').click(async () => {
 });
 
 $('#btn-invitation').click(() => {
+    if (isConferenceProtected) {
+        displayErrorModal('This sample application does not support the Enhanced Conference Access Control option, which is enabled in your Dolby.io application. You will not be able to invite participants from this sample application. Disable this option in the Dolby.io application, or pick another application that has this option disabled and try again.');
+        return;
+    }
+
     const alias = $('#input-conference-alias').val();
 
     const urlParams = new URLSearchParams(window.location.search);
