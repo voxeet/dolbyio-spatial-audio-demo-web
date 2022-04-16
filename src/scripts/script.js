@@ -298,7 +298,7 @@ $('#btn-exit').click(async () => {
 
 $('#btn-invitation').click(() => {
     if (isConferenceProtected) {
-        displayErrorModal('Because your Dolby.io application has the Enhanced Conference Access Control enabled, you will not be able to invite participants from this sample application. Pick another application that has this security flag disabled and try again.');
+        displayErrorModal('This sample application does not support the Enhanced Conference Access Control option, which is enabled in your Dolby.io application. You will not be able to invite participants from this sample application. Disable this option in the Dolby.io application, or pick another application that has this option disabled and try again.');
         return;
     }
 
