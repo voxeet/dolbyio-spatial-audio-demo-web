@@ -40,7 +40,8 @@
                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <div class="d-grid gap-2 hide-demo">
+                <div class="d-grid gap-2 hide-for-demo">
+                    <button id="btn-invitation" type="button" class="btn btn-success">Invite someone</button>
                     <button id="btn-video-on" type="button" class="btn btn-primary d-none">Video On</button>
                     <button id="btn-video-off" type="button" class="btn btn-secondary d-none">Video Off</button>
                     <button id="btn-unmute" type="button" class="btn btn-primary d-none">Unmute</button>
@@ -54,24 +55,43 @@
                 </div>
 
                 <!-- Video Devices -->
-                <div class="d-grid gap-2 border-top mt-3 hide-demo">
+                <div class="d-grid gap-2 border-top mt-3 hide-for-demo">
                     <label for="video-devices" class="col-form-label">Video Devices:</label>
                     <select id="video-devices" class="custom-select"></select>
                     <button id="btn-set-video-device" class="btn btn-info" type="button" disabled>Set</button>
                 </div>
         
                 <!-- Input Audio Devices -->
-                <div class="d-grid gap-2 border-top mt-3 hide-demo">
+                <div class="d-grid gap-2 border-top mt-3 hide-for-demo">
                     <label for="input-audio-devices" class="col-form-label">Input Audio Devices:</label>
                     <select id="input-audio-devices" class="custom-select"></select>
                     <button id="btn-set-input-audio-device" class="btn btn-info" type="button" disabled>Set</button>
                 </div>
         
                 <!-- Output Audio Devices -->
-                <div class="d-grid gap-2 border-top mt-3 hide-demo">
+                <div class="d-grid gap-2 border-top mt-3 hide-safari">
                     <label for="output-audio-devices" class="col-form-label">Output Audio Devices:</label>
                     <select id="output-audio-devices" class="custom-select"></select>
                     <button id="btn-set-output-audio-device" class="btn btn-info" type="button" disabled>Set</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="error-modal" class="modal modal-error" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Dolby.io Spatial Audio</h5>
+                    An error happened...
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3" style="text-align: center;">
+                        <img src="images/siren.png" style="height: 96px;">
+                    </div>
+                    <div class="mb-3">
+                        <span id="error-message"></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -82,20 +102,44 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Dolby.io Spatial Audio</h5>
-                    Initialize the SDK
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="input-consumer-key" class="form-label">Dolby.io Consumer Key:</label>
-                        <input id="input-consumer-key" type="text" class="form-control" placeholder="Consumer Key">
-                    </div>
-                    <div class="mb-3">
-                        <label for="input-consumer-secret" class="form-label">Dolby.io Consumer Secret:</label>
-                        <input id="input-consumer-secret" type="text" class="form-control" placeholder="Consumer Secret">
+                        <label for="input-access-token" class="form-label">Provide an Access Token from your Dolby.io dashboard:</label>
+                        <textarea id="input-access-token" class="form-control" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button id="btn-initialize" type="button" class="btn btn-primary">Initialize the SDK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="invitation-modal" class="modal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Dolby.io Spatial Audio - Invitation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="mb-3">
+                                Copy the link below and share it with someone to join you in the conference.
+                            </div>
+                            <div class="mb-3" style="text-align: center;">
+                                <textarea id="input-invitation-link" class="form-control" rows="3" readonly></textarea>
+                                <div class="valid-feedback">
+                                    Copied to clipboard, now share the link with someone.
+                                </div>
+                            </div>
+                            <div class="mb-3 d-grid">
+                                <button id="btn-copy-invitation" type="button" class="btn btn-primary">Copy to clipboard</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -118,7 +162,7 @@
                                     <img src="images/earphone.png" style="height: 96px;">
                                 </div>
                                 <div class="mb-3 d-grid">
-                                    <button id="btn-demo" type="button" class="btn btn-primary">Demo</button>
+                                    <button id="btn-demo" type="button" class="btn btn-primary">Join demo</button>
                                 </div>
                             </div>
                             <div class="col">
@@ -131,7 +175,7 @@
                                     <input id="input-username" type="text" class="form-control" placeholder="Your name">
                                 </div>
                                 <div class="mb-3 d-grid">
-                                    <button id="btn-join" type="button" class="btn btn-primary">Join</button>
+                                    <button id="btn-join" type="button" class="btn btn-primary">Join conference</button>
                                 </div>
                             </div>
                         </div>
@@ -188,7 +232,13 @@
         integrity="sha512-bKlNlbTH3duwZ28zoqEhXui/yuaPuQVci6OAVu0zh2WfYbEKD39HszVR8byP4/L4YyBo3b5CGIY+4ldVN93uCg=="
         crossorigin="anonymous"
         referrerpolicy="no-referrer"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bowser/2.11.0/bundled.min.js"
+        integrity="sha512-hsF/cpBvi/vjCP4Ps/MrPUFk6l4BqcGbzVUhqjJdX2SmAri1Oj8FBUGCvBiKHYd6gg3vLsV16CtIRNOvK5X4lQ=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
     <script type="text/javascript" src="scripts/utils.js"></script>
+    <script type="text/javascript" src="scripts/modals.js"></script>
     <script type="text/javascript" src="scripts/actions.js"></script>
     <script type="text/javascript" src="scripts/videos.js"></script>
     <script type="text/javascript" src="scripts/controls.js"></script>

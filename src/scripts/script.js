@@ -258,9 +258,9 @@ const createAndJoinConference = async (isDemo) => {
 
         // Display the actions buttons
         if (isDemo) {
-            $('.hide-demo').addClass('d-none');
+            $('.hide-for-demo').addClass('d-none');
         } else {
-            $('.hide-demo').removeClass('d-none');
+            $('.hide-for-demo').removeClass('d-none');
             $(joinOptions.constraints.audio ? '#btn-mute' : '#btn-unmute').removeClass('d-none');
             $(joinOptions.constraints.audio ? '#btn-unmute' : '#btn-mute').addClass('d-none');
             $(joinOptions.constraints.video ? '#btn-video-off' : '#btn-video-on').removeClass('d-none');
@@ -270,6 +270,7 @@ const createAndJoinConference = async (isDemo) => {
         window.addEventListener('resize', onWindowResize);
     } catch (error) {
         console.error(error);
+        displayErrorModal(error);
     }
 };
 
@@ -290,44 +291,73 @@ $('#btn-exit').click(async () => {
     $('.offcanvas-backdrop').remove();
 });
 
-$('#btn-initialize').click(() => {
-    var key = $('#input-consumer-key').val();
-    var secret = $('#input-consumer-secret').val();
+$('#btn-invitation').click(() => {
+    const alias = $('#input-conference-alias').val();
 
-    VoxeetSDK.initialize(key, secret);
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('token', accessToken);
+    urlParams.set('alias', alias);
+    let link = window.location.href.replace(window.location.search, '') + '?' + urlParams;
+    $('#input-invitation-link').val(link);
+    displayModal('invitation-modal');
+});
+
+$('#btn-copy-invitation').click(() => {
+    var value = $('#input-invitation-link').val();
+    navigator.clipboard.writeText(value);
+
+    $('#input-invitation-link').addClass('is-valid');
+    setTimeout(() => {
+        $('#input-invitation-link').removeClass('is-valid');
+    }, 5000);
+});
+
+var accessToken;
+
+$('#btn-initialize').click(() => {
+    accessToken = $('#input-access-token').val();
+
+    console.log(`Initialize the SDK with the Access Token: ${accessToken}`);
+    VoxeetSDK.initializeToken(accessToken, () => new Promise((resolve) => resolve(accessToken)));
 
     hideModal('init-modal');
 
     displayModal('login-modal');
 });
 
-const displayModal = (elementId) => {
-    const modalElement = document.getElementById(elementId);
-    const bootstrapModal = new bootstrap.Modal(modalElement, {
-        backdrop: 'static',
-        keyboard: false,
-        focus: true
-    });
-    bootstrapModal.show();
-}
-
-const hideModal = (elementId) => {
-    const modalElement = document.getElementById(elementId);
-    const bootstrapModal = bootstrap.Modal.getInstance(modalElement);
-    bootstrapModal.hide();
-}
-
 $(function() {
     const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-    if (token) {
-        console.log(`Initialize the SDK with the Access Token: ${token}`);
-        VoxeetSDK.initializeToken(token, () => new Promise((resolve) => resolve(token)));
+
+    // Automatically try to load the Access Token
+    accessToken = urlParams.get('token');
+    if (accessToken && accessToken.length > 0) {
+        console.log(`Initialize the SDK with the Access Token: ${accessToken}`);
+        VoxeetSDK.initializeToken(accessToken, () => new Promise((resolve) => resolve(accessToken)));
         displayModal('login-modal');
     } else {
         displayModal('init-modal');
     }
 
+    // Automatically try to get the conference alias
+    const alias = urlParams.get('alias');
+    if (alias && alias.length > 0) {
+        $('#input-conference-alias').val(alias);
+    }
+
     documentHeight = document.documentElement.clientHeight;
     documentWidth = document.documentElement.clientWidth;
+
+    const browser = bowser.getParser(window.navigator.userAgent);
+    if (!browser.chrome) {
+        $('.hide-safari').remove();
+    }
+
+    console.group('Dolby.io Spatial Audio Demo');
+    console.log('GitHub repository: https://github.com/dolbyio-samples/dolbyio-spatial-audio-demo-web');
+    console.log('The avatar images are made by:');
+    console.log('photo3idea_studio - https://www.flaticon.com/authors/photo3idea-studio');
+    console.log('Freepik - https://www.freepik.com');
+    console.log('Micro icons - https://www.flaticon.com/free-icons/micro');
+    console.log('https://www.flaticon.com');
+    console.groupEnd();
 });

@@ -14,6 +14,7 @@ You can also control the spatial audio scene for other participants. When you ha
 
 This sample application is using the following Open Source projects:
 - [Bootstrap](https://getbootstrap.com)
+- [Bowser](https://github.com/lancedikson/bowser)
 - [JsRender](https://www.jsviews.com/)
 - [JQuery](https://jquery.com)
 - [JQuery UI Touch Punch](https://github.com/furf/jquery-ui-touch-punch)
