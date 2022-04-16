@@ -157,3 +157,8 @@ body > main {
     width: 30px;
     height: 30px;
 }
+
+.modal-error .modal-header {
+    background-color: #f8d7da;
+    color: #842029;
+}
