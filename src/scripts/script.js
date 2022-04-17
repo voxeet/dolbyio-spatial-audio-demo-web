@@ -309,6 +309,7 @@ $('#btn-invitation').click(() => {
     urlParams.set('alias', alias);
     let link = window.location.href.replace(window.location.search, '') + '?' + urlParams;
     $('#input-invitation-link').val(link);
+    $('#span-link-expiration').text(accessTokenExpiration)
     displayModal('invitation-modal');
 });
 
@@ -323,17 +324,31 @@ $('#btn-copy-invitation').click(() => {
 });
 
 var accessToken;
+var accessTokenExpiration;
 
 $('#btn-initialize').click(() => {
     accessToken = $('#input-access-token').val();
-
-    console.log(`Initialize the SDK with the Access Token: ${accessToken}`);
-    VoxeetSDK.initializeToken(accessToken, () => new Promise((resolve) => resolve(accessToken)));
-
     hideModal('init-modal');
-
-    displayModal('login-modal');
+    initializeSDK(accessToken);
 });
+
+const initializeSDK = (accessToken) => {
+    const token = accessToken.split('.')[1];
+    const jwt = JSON.parse(window.atob(token));
+    accessTokenExpiration = new Date(jwt.exp * 1000);
+    if (accessTokenExpiration.getTime() <= new Date().getTime()) {
+        displayErrorModal('The access token you have provided has expired.');
+        return;
+    }
+
+    console.group('Access Token');
+    console.log(`\x1B[94mInitialize the SDK with the Access Token: \x1B[m${accessToken}`);
+    console.log(`Access Token Expiration: ${accessTokenExpiration}`);
+    console.groupEnd();
+
+    VoxeetSDK.initializeToken(accessToken, () => new Promise((resolve) => resolve(accessToken)));
+    displayModal('login-modal');
+};
 
 $(function() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -341,9 +356,7 @@ $(function() {
     // Automatically try to load the Access Token
     accessToken = urlParams.get('token');
     if (accessToken && accessToken.length > 0) {
-        console.log(`Initialize the SDK with the Access Token: ${accessToken}`);
-        VoxeetSDK.initializeToken(accessToken, () => new Promise((resolve) => resolve(accessToken)));
-        displayModal('login-modal');
+        initializeSDK(accessToken);
     } else {
         displayModal('init-modal');
     }
