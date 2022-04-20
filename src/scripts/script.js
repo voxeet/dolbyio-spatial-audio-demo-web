@@ -370,8 +370,10 @@ $(function() {
     documentHeight = document.documentElement.clientHeight;
     documentWidth = document.documentElement.clientWidth;
 
-    const browser = bowser.getParser(window.navigator.userAgent);
-    if (!browser.chrome) {
+    // GestureEvent is only available on Safari
+    // See: https://developer.mozilla.org/en-US/docs/Web/API/Element/gesturechange_event
+    const isSafari = typeof window.GestureEvent === 'function';
+    if (isSafari) {
         $('.hide-safari').remove();
     }
 
