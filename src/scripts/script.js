@@ -248,6 +248,11 @@ const createAndJoinConference = async (isDemo) => {
             
             // Join the conference
             await VoxeetSDK.conference.join(conference, joinOptions);
+
+            if (conference.alias.startsWith('DEMO-')) {
+                // Temporary workaround when joining a demo conference
+                isDemo = true;
+            }
         }
 
         // Set the spatial audio scene
@@ -266,11 +271,12 @@ const createAndJoinConference = async (isDemo) => {
             $('.hide-for-demo').addClass('d-none');
         } else {
             $('.hide-for-demo').removeClass('d-none');
-            $(joinOptions.constraints.audio ? '#btn-mute' : '#btn-unmute').removeClass('d-none');
-            $(joinOptions.constraints.audio ? '#btn-unmute' : '#btn-mute').addClass('d-none');
             $(joinOptions.constraints.video ? '#btn-video-off' : '#btn-video-on').removeClass('d-none');
             $(joinOptions.constraints.video ? '#btn-video-on' : '#btn-video-off').addClass('d-none');
         }
+
+        $(joinOptions.constraints.audio ? '#btn-mute' : '#btn-unmute').removeClass('d-none');
+        $(joinOptions.constraints.audio ? '#btn-unmute' : '#btn-mute').addClass('d-none');
 
         window.addEventListener('resize', onWindowResize);
     } catch (error) {
@@ -302,11 +308,9 @@ $('#btn-invitation').click(() => {
         return;
     }
 
-    const alias = $('#input-conference-alias').val();
-
     const urlParams = new URLSearchParams(window.location.search);
     urlParams.set('token', accessToken);
-    urlParams.set('alias', alias);
+    urlParams.set('alias', VoxeetSDK.conference.current.alias);
     let link = window.location.href.replace(window.location.search, '') + '?' + urlParams;
     $('#input-invitation-link').val(link);
     $('#span-link-expiration').text(accessTokenExpiration)

@@ -40,10 +40,10 @@
                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <div class="d-grid gap-2 hide-for-demo">
+                <div class="d-grid gap-2">
                     <button id="btn-invitation" type="button" class="btn btn-success">Invite someone</button>
-                    <button id="btn-video-on" type="button" class="btn btn-primary d-none">Video On</button>
-                    <button id="btn-video-off" type="button" class="btn btn-secondary d-none">Video Off</button>
+                    <button id="btn-video-on" type="button" class="btn btn-primary d-none hide-for-demo">Video On</button>
+                    <button id="btn-video-off" type="button" class="btn btn-secondary d-none hide-for-demo">Video Off</button>
                     <button id="btn-unmute" type="button" class="btn btn-primary d-none">Unmute</button>
                     <button id="btn-mute" type="button" class="btn btn-secondary d-none">Mute</button>
                     <button id="btn-take-control" type="button" class="btn btn-primary">Take Control</button>
@@ -62,7 +62,7 @@
                 </div>
         
                 <!-- Input Audio Devices -->
-                <div class="d-grid gap-2 border-top mt-3 hide-for-demo">
+                <div class="d-grid gap-2 border-top mt-3">
                     <label for="input-audio-devices" class="col-form-label">Input Audio Devices:</label>
                     <select id="input-audio-devices" class="custom-select"></select>
                     <button id="btn-set-input-audio-device" class="btn btn-info" type="button" disabled>Set</button>
