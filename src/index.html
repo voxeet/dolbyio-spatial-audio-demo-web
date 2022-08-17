@@ -5,6 +5,10 @@
     <title>Dolby.io Spatial Audio</title>
     <link rel="manifest" href="manifest.json" />
     <script type="text/javascript" src="voxeet-sdk.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/@dolbyio/comms-sdk-web-extensions@1.0.1/dist/voxeet-sdk-ext.js"
+        integrity="sha256-aTb5L3Zf4QXKsSlNSAjDxOMvIkZmqXfoULtWXSgYMwY="
+        crossorigin="anonymous"></script>
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.2/css/bootstrap.min.css"
         integrity="sha512-SCpMC7NhtrwHpzwKlE1l6ks0rS+GbMJJpoQw/A742VaxdGcQKqVD8F/y/m9WLOfIPppy7mWIs/kS0bKgSI0Bfw=="
@@ -22,6 +26,12 @@
 
 <body>
     <main>
+        <div id="private-zone" class="background-border-private-zone hide">
+            <p>
+                Private zone<br/>
+                <small id="private-zone-description">You can only hear users in this zone and users outside can't hear you.</small>
+            </p>
+        </div>
         <div class="background-border-container-a"></div>
         <div class="background-border-container-b"></div>
         <img id="dolbyio-logo" src="images/dolbyio-logo.png" />
@@ -46,8 +56,6 @@
                     <button id="btn-video-off" type="button" class="btn btn-secondary d-none hide-for-demo">Video Off</button>
                     <button id="btn-unmute" type="button" class="btn btn-primary d-none">Unmute</button>
                     <button id="btn-mute" type="button" class="btn btn-secondary d-none">Mute</button>
-                    <button id="btn-take-control" type="button" class="btn btn-primary">Take Control</button>
-                    <button id="btn-release-control" type="button" class="btn btn-secondary d-none">Release Control</button>
                 </div>
 
                 <div class="d-grid gap-2 border-top mt-3">
@@ -105,7 +113,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="input-access-token" class="form-label">Provide an Access Token from your Dolby.io dashboard:</label>
+                        <label for="input-access-token" class="form-label">Provide a Client Access Token from your Dolby.io dashboard:</label>
                         <textarea id="input-access-token" class="form-control" style="resize: none;" rows="3"></textarea>
                     </div>
                 </div>
@@ -236,7 +244,7 @@
     <script type="text/javascript" src="scripts/modals.js"></script>
     <script type="text/javascript" src="scripts/actions.js"></script>
     <script type="text/javascript" src="scripts/videos.js"></script>
-    <script type="text/javascript" src="scripts/controls.js"></script>
+    <script type="text/javascript" src="scripts/positions.js"></script>
     <script type="text/javascript" src="scripts/script.js"></script>
 </body>
 </html>

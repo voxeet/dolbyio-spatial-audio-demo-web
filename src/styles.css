@@ -77,6 +77,32 @@ body > main {
     left: 100px;
 }
 
+.background-border-private-zone {
+    position: absolute;
+    bottom: 90px;
+    left: 33%;
+    height: 33%;
+    width: 33%;
+    background-color: rgba(255,255,255,.15);
+    border-radius: 20px;
+    border: 5px solid #863FD6;
+    padding: 20px;
+
+    -webkit-box-shadow: 15px 30px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 15px 30px rgba(0, 0, 0, 0.2);
+    -o-box-shadow: 15px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.hide {
+    display: none;
+}
+
+.background-border-private-zone p {
+    color: rgba(255, 255, 255, .5);
+    font-size: 28px;
+}
+
 .main-container {
     width: 100%;
     margin: 85px 145px;
@@ -111,6 +137,9 @@ body > main {
 
 .user-container.is-speaking .video-container.green {
     background-color: rgba(0, 127, 70, 0.6);
+}
+.user-container.in-private-zone .video-container {
+    border-color: red;
 }
 
 .user-container.ui-draggable-dragging .video-container {

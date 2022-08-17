@@ -11,7 +11,7 @@ VoxeetSDK.conference.on('participantAdded', (participant) => {
     showToast('Participant', message);
 });
 
-VoxeetSDK.conference.on('participantUpdated', (participant) => {
+VoxeetSDK.conference.on('participantUpdated', async (participant) => {
     // Look for the video container element in the DOM
     const container = document.getElementById(`user-${participant.id}-container`);
 
@@ -21,11 +21,11 @@ VoxeetSDK.conference.on('participantUpdated', (participant) => {
         }
 
         $(`#user-${participant.id}-container .participant-name`).html(participant.info.name);
-        setSpatialPosition(participant);
+        await setSpatialPosition(participant);
     } else if (container) {
         container.remove();
 
-        var message = `${participant.info.name ?? 'someone'} has left the conference.`;
+        let message = `${participant.info.name ?? 'someone'} has left the conference.`;
         if (participant.info.avatarUrl !== null) {
             message = `<img class="avatar" src="${participant.info.avatarUrl}" /> ${message}`;
         }
@@ -43,6 +43,9 @@ VoxeetSDK.conference.on("left", async () => {
     displayModal('login-modal');
 });
 
+/**
+ * Returns if there are any other user at that location. 
+ */
 const isEmptyPosition = (top, left, height, width) => {
     const elements = document.getElementsByClassName('user-container');
     for (let index = 0; index < elements.length; index++) {
@@ -55,6 +58,24 @@ const isEmptyPosition = (top, left, height, width) => {
     return true;
 };
 
+/**
+ * Returns if the object coordinate is in the private zone or not.
+ */
+const isInPrivateZone = (top, left, height, width) => {
+    const x = left + (width / 2);
+    const y = top + (height / 2);
+    const privateZoneElement = document.getElementById('private-zone');
+    const privateZoneRect = privateZoneElement.getBoundingClientRect();
+
+    if (x < privateZoneRect.left || x > privateZoneRect.left + privateZoneRect.width) {
+        return false;
+    }
+    if (y < privateZoneRect.top || y > privateZoneRect.top + privateZoneRect.height) {
+        return false;
+    }
+    return true;
+}
+
 const getEmptyPosition = (height, width) => {
     const usersContainer = document.getElementById('users-container').getBoundingClientRect();
 
@@ -66,11 +87,11 @@ const getEmptyPosition = (height, width) => {
     var top = 0;
     var left = 0;
 
-    for (let index = 0; index < 10; index++) {
+    for (let index = 0; index < 15; index++) {
         left = xMin + Math.floor(Math.random() * (xMax - xMin));
         top = yMin + Math.floor(Math.random() * (yMax - yMin));
-        
-        if (isEmptyPosition(top, left, height, width)) {
+
+        if (!isInPrivateZone(top, left, height, width) && isEmptyPosition(top, left, height, width)) {
             break;
         }
     }
@@ -97,34 +118,73 @@ const addParticipant = (participant) => {
     const position = getEmptyPosition(clientRect.height, clientRect.width)
     element.attr('style', `top: ${position.top}px; left: ${position.left}px;`);
 
+    // Only allow to drag self unless in Demo mode
+    if (!isDemoMode && participant.id !== VoxeetSDK.session.participant.id) return;
+
     // Allow to drag & drop the element
     element.draggable({
         containment: 'parent',
         delay: 100,
         stop: async () => {
-            setSpatialPosition(participant);
-            await controlUpdatePosition(participant);
+            await setSpatialPosition(participant);
+            await updatePosition(participant);
         }
     });
 };
 
+var _privateZoneId;
+
 /**
  * Set the spatial scene.
  */
-const setSpatialEnvironment = () => {
+const setSpatialEnvironment = async () => {
     const scale   = { x: window.innerWidth / 1, y: window.innerHeight / 1, z: 1 };
     const forward = { x: 0, y: -1, z: 0 };
     const up      = { x: 0, y: 0,  z: 1 };
     const right   = { x: 1, y: 0,  z: 0 };
 
-    VoxeetSDK.conference.setSpatialEnvironment(scale, forward, up, right);
+    VoxeetSDKExt.spatialAudio.setSpatialEnvironment(scale, forward, up, right);
+
+    await createPrivateZone();
 };
+
+/**
+ * Create a private audio zone.
+ */
+const createPrivateZone = async () => {
+    const privateZoneDescriptionElement = document.getElementById('private-zone-description');
+    privateZoneDescriptionElement.classList.remove('hide');
+
+    const privateZoneElement = document.getElementById('private-zone');
+    privateZoneElement.classList.remove('hide');
+
+    const privateZoneRect = privateZoneElement.getBoundingClientRect();
+
+    const zoneSettings = {
+        origin: {x: privateZoneRect.left, y: privateZoneRect.top, z: 0},
+        dimension: {x: privateZoneRect.width, y: privateZoneRect.height, z: 0},
+        scale: {x: window.innerWidth / 2, y: window.innerHeight / 2, z: 1},
+    };
+
+    if (VoxeetSDKExt.spatialAudio.privateZones.size <= 0) {
+        // Create a private zone that is in the top left corner of the window
+        _privateZoneId = await VoxeetSDKExt.spatialAudio.createPrivateZone(zoneSettings);
+    } else {
+        // Update the existing private zone
+        await VoxeetSDKExt.spatialAudio.updatePrivateZone(_privateZoneId, zoneSettings);
+    }
+
+    setTimeout(async () => {
+        // Hide the text description
+        privateZoneDescriptionElement.classList.add('hide');
+    }, 10000);
+}
 
 /**
  * Set the position in the spatial scene for the specified participant.
  * @param participant Participant to position on the spatial scene.
  */
-const setSpatialPosition = (participant) => {
+const setSpatialPosition = async (participant) => {
     if (!isConnected(participant)) return;
 
     // Look for the participant element
@@ -141,8 +201,14 @@ const setSpatialPosition = (participant) => {
         z: 0,
     };
 
+    if (isInPrivateZone(elementPosition.top, elementPosition.left, elementPosition.height, elementPosition.width)) {
+        container.classList.add('in-private-zone');
+    } else {
+        container.classList.remove('in-private-zone');
+    }
+
     console.log(`Set Spatial Position for ${participant.id}`, spatialPosition);
-    VoxeetSDK.conference.setSpatialPosition(participant, spatialPosition);
+    await VoxeetSDKExt.spatialAudio.setSpatialPosition(participant, spatialPosition);
 };
 
 var lockResizeEvent = false;
@@ -159,14 +225,14 @@ const onWindowResize = () => {
     lockResizeEvent = true;
 
     // Use the setTimeout to wait a second before we process the resize event
-    setTimeout(() => {
+    setTimeout(async () => {
         lockResizeEvent = false;
 
         // Re-set the spatial audio scene dimensions
-        setSpatialEnvironment();
+        await setSpatialEnvironment();
 
         // For each participant, we need to update the spatial position
-        [...VoxeetSDK.conference.participants].map((val) => {
+        [...VoxeetSDK.conference.participants].map(async (val) => {
             const participant = val[1];
             const container = document.getElementById(`user-${participant.id}-container`);
             if (container) {
@@ -180,7 +246,7 @@ const onWindowResize = () => {
                 // Animate the UI element to its new position
                 $(container).animate({ top: `${top}px`, left: `${left}px` }, 500);
             
-                setSpatialPosition(participant);
+                await setSpatialPosition(participant);
             }
         });
         
@@ -190,9 +256,12 @@ const onWindowResize = () => {
 };
 
 var isConferenceProtected = false;
+var isDemoMode = false;
 
 const createAndJoinConference = async (isDemo) => {
     try {
+        isDemoMode = isDemo;
+
         var name = $('#input-username').val();
         const avatarUrl = getRandomAvatar();
 
@@ -256,7 +325,7 @@ const createAndJoinConference = async (isDemo) => {
         }
 
         // Set the spatial audio scene
-        setSpatialEnvironment();
+        await setSpatialEnvironment();
 
         // Load the Audio Video devices in case the user
         // wants to change device
@@ -355,6 +424,7 @@ const initializeSDK = (accessToken) => {
 };
 
 $(function() {
+    //return;
     const urlParams = new URLSearchParams(window.location.search);
 
     // Automatically try to load the Access Token
