@@ -255,7 +255,6 @@ const onWindowResize = () => {
     }, 1000);
 };
 
-var isConferenceProtected = false;
 var isDemoMode = false;
 
 const createAndJoinConference = async (isDemo) => {
@@ -306,9 +305,6 @@ const createAndJoinConference = async (isDemo) => {
 
             // Create the conference
             const conference = await VoxeetSDK.conference.create(conferenceOptions);
-
-            // If the conference is protected then the permissions set is empty
-            isConferenceProtected = conference.permissions && conference.permissions.size <= 0;
 
             console.group('Conference created');
             console.log(`Id:    ${conference.id}`);
@@ -372,7 +368,7 @@ $('#btn-exit').click(async () => {
 });
 
 $('#btn-invitation').click(() => {
-    if (isConferenceProtected) {
+    if (VoxeetSDK.conference.current.isProtected) {
         displayErrorModal('This sample application does not support the Enhanced Conference Access Control option, which is enabled in your Dolby.io application. You will not be able to invite participants from this sample application. Disable this option in the Dolby.io application, or pick another application that has this option disabled and try again.');
         return;
     }
@@ -424,7 +420,6 @@ const initializeSDK = (accessToken) => {
 };
 
 $(function() {
-    //return;
     const urlParams = new URLSearchParams(window.location.search);
 
     // Automatically try to load the Access Token
@@ -458,5 +453,6 @@ $(function() {
     console.log('Freepik - https://www.freepik.com');
     console.log('Micro icons - https://www.flaticon.com/free-icons/micro');
     console.log('https://www.flaticon.com');
+    console.log('Dolby.io SDK extensions - https://github.com/DolbyIO/comms-sdk-web-extensions');
     console.groupEnd();
 });

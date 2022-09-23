@@ -4,7 +4,7 @@ This sample application allows you to demonstrate how Spatial Audio works.
 
 ![](wiki/layout.png)
 
-This is what the application looks like. Everybody can move the participants on their UI and will get a unique spatial audio scene. Moving into the Private zone will isolate your from other participants. This is handled using the [SDK extension](https://github.com/DolbyIO/comms-sdk-web-extensions) available on GitHub.
+This is what the application looks like. Everybody can move the participants on their UI and will get a unique spatial audio scene. Moving into the Private zone will isolate your from other participants. This is handled using the [SDK extensions](https://github.com/DolbyIO/comms-sdk-web-extensions) available on GitHub.
 
 ## Open Source Projects
 
@@ -14,7 +14,7 @@ This sample application is using the following Open Source projects:
 - [JQuery](https://jquery.com)
 - [JQuery UI Touch Punch](https://github.com/furf/jquery-ui-touch-punch)
 - [Express](https://expressjs.com/)
-- [Dolby.io SDK extension](https://github.com/DolbyIO/comms-sdk-web-extensions)
+- [Dolby.io SDK extensions](https://github.com/DolbyIO/comms-sdk-web-extensions)
 
 ## Avatar images
 
