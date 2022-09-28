@@ -25,12 +25,9 @@ const addVideoNode = (participant, stream) => {
     let videoNode = document.getElementById(`video-${participant.id}`);
 
     if (!videoNode) {
-        videoNode = document.createElement('video');
+        videoNode = VoxeetSDKExt.conference.attachMediaStreamToHTMLVideoElement(participant);
 
         videoNode.setAttribute('id', `video-${participant.id}`);
-        videoNode.setAttribute("playsinline", true);
-        videoNode.muted = true;
-        videoNode.setAttribute("autoplay", 'autoplay');
 
         // Add the video element to the container
         const videoContainer = $(`#user-${participant.id}-container .video-container`);

@@ -1,6 +1,6 @@
 const startVideo = async () => {
     try {
-        await VoxeetSDK.conference.startVideo(VoxeetSDK.session.participant);
+        await VoxeetSDK.video.local.start();
 
         document.getElementById('btn-video-off').classList.remove('d-none');
         document.getElementById('btn-video-on').classList.add('d-none');
@@ -11,7 +11,7 @@ const startVideo = async () => {
 
 const stopVideo = async () => {
     try {
-        await VoxeetSDK.conference.stopVideo(VoxeetSDK.session.participant);
+        await VoxeetSDK.video.local.stop();
 
         document.getElementById('btn-video-off').classList.add('d-none');
         document.getElementById('btn-video-on').classList.remove('d-none');

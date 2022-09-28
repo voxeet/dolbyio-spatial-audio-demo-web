@@ -40,7 +40,7 @@ const getRandomIsSpeakingColor = () => {
 const loadAudioVideoDevices = async () => {
     try {
         // Load the Output Audio devices
-        const audioOutput = await VoxeetSDK.mediaDevice.enumerateAudioDevices("output");
+        const audioOutput = await VoxeetSDK.mediaDevice.enumerateAudioOutputDevices();
         console.log("Output Audio Devices");
         console.log(audioOutput);
 
@@ -53,7 +53,7 @@ const loadAudioVideoDevices = async () => {
         $('#btn-set-output-audio-device').attr('disabled', false);
 
         // Load the Input Audio devices
-        const audioInput = await VoxeetSDK.mediaDevice.enumerateAudioDevices("input");
+        const audioInput = await VoxeetSDK.mediaDevice.enumerateAudioInputDevices();
         console.log("Input Audio Devices");
         console.log(audioInput);
 
@@ -66,7 +66,7 @@ const loadAudioVideoDevices = async () => {
         $('#btn-set-input-audio-device').attr('disabled', false);
 
         // Load the Video devices
-        const videoInput = await VoxeetSDK.mediaDevice.enumerateVideoDevices("input");
+        const videoInput = await VoxeetSDK.mediaDevice.enumerateVideoInputDevices();
         console.log("Video Devices");
         console.log(videoInput);
 
