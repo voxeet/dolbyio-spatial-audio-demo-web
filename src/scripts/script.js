@@ -1,8 +1,8 @@
-VoxeetSDK.conference.on('participantAdded', (participant) => {
+VoxeetSDK.conference.on('participantAdded', async (participant) => {
     // Only add connected participants
     if (!isConnected(participant)) return;
 
-    addParticipant(participant);
+    await addParticipant(participant);
 
     var message = `${participant.info.name ?? 'someone'} has joined the conference.`;
     if (participant.info.avatarUrl !== null) {
@@ -17,7 +17,7 @@ VoxeetSDK.conference.on('participantUpdated', async (participant) => {
 
     if (isConnected(participant)) {
         if (!container) {
-            addParticipant(participant);
+            await addParticipant(participant);
         }
 
         $(`#user-${participant.id}-container .participant-name`).html(participant.info.name);
@@ -103,7 +103,7 @@ const getEmptyPosition = (height, width) => {
  * Adds a participant to the layout.
  * @param participant Participant object.
  */
-const addParticipant = (participant) => {
+const addParticipant = async (participant) => {
     const person = {
         color: getRandomIsSpeakingColor(),
         participantId: participant.id,
@@ -117,6 +117,8 @@ const addParticipant = (participant) => {
 
     const position = getEmptyPosition(clientRect.height, clientRect.width)
     element.attr('style', `top: ${position.top}px; left: ${position.left}px;`);
+    
+    await updatePosition();
 
     // Only allow to drag self unless in Demo mode
     if (!isDemoMode && participant.id !== VoxeetSDK.session.participant.id) return;
@@ -127,7 +129,7 @@ const addParticipant = (participant) => {
         delay: 100,
         stop: async () => {
             await setSpatialPosition(participant);
-            await updatePosition(participant);
+            await updatePosition();
         }
     });
 };
