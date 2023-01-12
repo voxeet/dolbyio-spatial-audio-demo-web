@@ -109,6 +109,7 @@ const addParticipant = async (participant) => {
         participantId: participant.id,
         avatarUrl: participant.info.avatarUrl,
         name: participant.info.name,
+        localCss: VoxeetSDK.session.participant.id === participant.id ? 'local' : '',
     };
 
     const element = $($('#user-template').render(person));
@@ -145,7 +146,7 @@ const setSpatialEnvironment = async () => {
     const up      = { x: 0, y: 0,  z: 1 };
     const right   = { x: 1, y: 0,  z: 0 };
 
-    VoxeetSDKExt.spatialAudio.setSpatialEnvironment(scale, forward, up, right);
+    VoxeetSDKExt.privateZones.setSpatialEnvironment(scale, forward, up, right);
 
     await createPrivateZone();
 };
@@ -168,12 +169,12 @@ const createPrivateZone = async () => {
         scale: {x: window.innerWidth / 2, y: window.innerHeight / 2, z: 1},
     };
 
-    if (VoxeetSDKExt.spatialAudio.privateZones.size <= 0) {
+    if (VoxeetSDKExt.privateZones.zones.size <= 0) {
         // Create a private zone that is in the top left corner of the window
-        _privateZoneId = await VoxeetSDKExt.spatialAudio.createPrivateZone(zoneSettings);
+        _privateZoneId = await VoxeetSDKExt.privateZones.createZone(zoneSettings);
     } else {
         // Update the existing private zone
-        await VoxeetSDKExt.spatialAudio.updatePrivateZone(_privateZoneId, zoneSettings);
+        await VoxeetSDKExt.privateZones.updateZone(_privateZoneId, zoneSettings);
     }
 
     setTimeout(async () => {
@@ -210,7 +211,7 @@ const setSpatialPosition = async (participant) => {
     }
 
     console.log(`Set Spatial Position for ${participant.id}`, spatialPosition);
-    await VoxeetSDKExt.spatialAudio.setSpatialPosition(participant, spatialPosition);
+    await VoxeetSDKExt.privateZones.setSpatialPosition(participant, spatialPosition);
 };
 
 var lockResizeEvent = false;
@@ -263,7 +264,7 @@ const createAndJoinConference = async (isDemo) => {
     try {
         isDemoMode = isDemo;
 
-        var name = $('#input-username').val();
+        const name = isDemo ? 'Me' : $('#input-username').val();
         const avatarUrl = getRandomAvatar();
 
         // Open a session for the user
@@ -285,7 +286,7 @@ const createAndJoinConference = async (isDemo) => {
             },
             preferRecvMono: false,
             preferSendMono: false,
-            spatialAudio: true // Turn on Spatial Audio
+            spatialAudio: true, // Turn on Spatial Audio
         };
 
         if (isDemo) {
@@ -298,10 +299,11 @@ const createAndJoinConference = async (isDemo) => {
                 // See: https://docs.dolby.io/communications-apis/docs/js-client-sdk-model-conferenceparameters
                 params: {
                     liveRecording: false,
-                    rtcpMode: "average", // worst, average, max
+                    rtcpMode: 'average', // worst, average, max
                     ttl: 0,
-                    videoCodec: "H264", // H264, VP8
-                    dolbyVoice: true
+                    videoCodec: 'H264', // H264, VP8
+                    dolbyVoice: true,
+                    spatialAudioStyle: 'shared',
                 }
             };
 

@@ -5,28 +5,6 @@ body {
     min-height: -webkit-fill-available;
 }
 
-body.has-control {
-    background-color: #0B1659;
-    background: linear-gradient(135deg, #0B1659 0%, #113174 100%);
-}
-
-body.controlled {
-    background-color: #29697F;
-    background: linear-gradient(135deg, #29697F 0%, #283A62 100%);
-}
-
-body.controlled .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1055;
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    outline: 0;
-}
-
 body > main {
     display: flex;
     flex-wrap: nowrap;
@@ -105,11 +83,16 @@ body > main {
 
 .main-container {
     width: 100%;
-    margin: 85px 145px;
+    margin: 20px 25px 25px 20px;
 }
 
 .user-container {
     position: absolute;
+}
+
+.user-container.local {
+    z-index: 100000;
+    font-style: italic;
 }
 
 .video-container {
@@ -125,6 +108,10 @@ body > main {
     transition: background-color 250ms linear;
 
     background-color: rgba(255,255,255,0.2);
+}
+
+.user-container.local .video-container {
+    background-color: rgba(255,255,255,0.8);
 }
 
 .user-container.is-speaking .video-container.blue {

@@ -30,7 +30,7 @@ const getRandomIsSpeakingColor = () => {
  * @param participant Participant object to get the connection status.
  * @returns `true` if the participant is connected, `false` otherwise.
  */
- const isConnected = (participant) => {
+const isConnected = (participant) => {
     return [ 'Decline', 'Error', 'Kicked', 'Left' ].indexOf(participant.status) < 0;
 };
 
@@ -41,39 +41,30 @@ const loadAudioVideoDevices = async () => {
     try {
         // Load the Output Audio devices
         const audioOutput = await VoxeetSDK.mediaDevice.enumerateAudioOutputDevices();
-        console.log("Output Audio Devices");
-        console.log(audioOutput);
+        console.log('Output Audio Devices', audioOutput);
 
-        const audioOutput2 = [];
         audioOutput.forEach(device => {
             $('#output-audio-devices').append(new Option(device.label, device.deviceId));
-            audioOutput2.push({label: device.label, deviceId: device.deviceId});
         });
 
         $('#btn-set-output-audio-device').attr('disabled', false);
 
         // Load the Input Audio devices
         const audioInput = await VoxeetSDK.mediaDevice.enumerateAudioInputDevices();
-        console.log("Input Audio Devices");
-        console.log(audioInput);
+        console.log('Input Audio Devices', audioInput);
 
-        const audioInput2 = [];
         audioInput.forEach(device => {
             $('#input-audio-devices').append(new Option(device.label, device.deviceId));
-            audioInput2.push({label: device.label, deviceId: device.deviceId});
         });
 
         $('#btn-set-input-audio-device').attr('disabled', false);
 
         // Load the Video devices
         const videoInput = await VoxeetSDK.mediaDevice.enumerateVideoInputDevices();
-        console.log("Video Devices");
-        console.log(videoInput);
+        console.log('Video Devices', videoInput);
 
-        const videoInput2 = [];
         videoInput.forEach(device => {
             $('#video-devices').append(new Option(device.label, device.deviceId));
-            videoInput2.push({label: device.label, deviceId: device.deviceId});
         });
 
         $('#btn-set-video-device').attr('disabled', false);
