@@ -6,24 +6,21 @@
     <link rel="manifest" href="manifest.json" />
     
     <script
-        src="https://cdn.jsdelivr.net/npm/@voxeet/voxeet-web-sdk@3.7.0/dist/voxeet-sdk.js"
-        integrity="sha256-2Y7a1//5LFoSgPzDLpvrynibj5Qrzv/Je7AAXnZm8SA="
+        src="https://cdn.jsdelivr.net/npm/@voxeet/voxeet-web-sdk@3.8.1/dist/voxeet-sdk.js"
+        integrity="sha256-+YBEVlgB0gylrE8o9e1ZyD7BzQfzmOxwDOl3fjFBhjk="
         crossorigin="anonymous"></script>
     <script
-        src="https://cdn.jsdelivr.net/npm/@dolbyio/comms-sdk-web-extensions@1.1.3/dist/voxeet-sdk-ext.js"
-        integrity="sha256-WlDFdW+8U+lQtdJbZZAimmhvw/5rJorQ703HlOvU+bk="
+        src="https://cdn.jsdelivr.net/npm/@dolbyio/comms-sdk-web-extensions@2.0.0/dist/voxeet-sdk-ext.js"
+        integrity="sha256-g2216bMi2VdLRkugFMoSSIoh2Glmiah/1MJ5Bth1HDc="
         crossorigin="anonymous"></script>
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.2/css/bootstrap.min.css"
-        integrity="sha512-SCpMC7NhtrwHpzwKlE1l6ks0rS+GbMJJpoQw/A742VaxdGcQKqVD8F/y/m9WLOfIPppy7mWIs/kS0bKgSI0Bfw=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer" />
     <link
         rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
-        integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer" />
+        href="https://cdn.jsdelivr.net/combine/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css,npm/jquery-ui@1.13.2/dist/themes/base/jquery-ui.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/jquery-ui@1.13.2/dist/themes/base/jquery-ui.min.css"
+        integrity="sha256-VNxxeWv78fBpVZ3cM8LomS7+xUH2IXl6hJ1EKmmCJpY="
+        crossorigin="anonymous">
     <link rel="stylesheet"
         href="styles.css">
 </head>
@@ -44,48 +41,47 @@
 
     <div class="overlay"></div>
 
-        <button id="btn-settings" class="btn btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
-            <img src="images/settings.png" />
-        </button>
+    <button id="btn-settings" class="btn btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" title="Settings">
+        <img src="images/settings.png" title="Settings" />
+    </button>
 
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-            <div class="offcanvas-header">
-                <h5 id="offcanvasRightLabel">Dolby.io Spatial Audio</h5>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasRightLabel">Dolby.io Spatial Audio</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="d-grid gap-2">
+                <button id="btn-invitation" type="button" class="btn btn-success" title="Invite someone">Invite someone</button>
+                <button id="btn-video-on" type="button" class="btn btn-primary d-none hide-for-demo" title="Video On">Video On</button>
+                <button id="btn-video-off" type="button" class="btn btn-secondary d-none hide-for-demo" title="Video Off">Video Off</button>
+                <button id="btn-unmute" type="button" class="btn btn-primary d-none" title="Unmute">Unmute</button>
+                <button id="btn-mute" type="button" class="btn btn-secondary d-none" title="Mute">Mute</button>
             </div>
-            <div class="offcanvas-body">
-                <div class="d-grid gap-2">
-                    <button id="btn-invitation" type="button" class="btn btn-success">Invite someone</button>
-                    <button id="btn-video-on" type="button" class="btn btn-primary d-none hide-for-demo">Video On</button>
-                    <button id="btn-video-off" type="button" class="btn btn-secondary d-none hide-for-demo">Video Off</button>
-                    <button id="btn-unmute" type="button" class="btn btn-primary d-none">Unmute</button>
-                    <button id="btn-mute" type="button" class="btn btn-secondary d-none">Mute</button>
-                </div>
 
-                <div class="d-grid gap-2 border-top mt-3">
-                    <button id="btn-exit" type="button" class="btn btn-danger">Exit</button>
-                </div>
+            <div class="d-grid gap-2 border-top mt-3">
+                <button id="btn-exit" type="button" class="btn btn-danger" title="Exit">Exit</button>
+            </div>
 
-                <!-- Video Devices -->
-                <div class="d-grid gap-2 border-top mt-3 hide-for-demo">
-                    <label for="video-devices" class="col-form-label">Video Devices:</label>
-                    <select id="video-devices" class="custom-select"></select>
-                    <button id="btn-set-video-device" class="btn btn-info" type="button" disabled>Set</button>
-                </div>
-        
-                <!-- Input Audio Devices -->
-                <div class="d-grid gap-2 border-top mt-3">
-                    <label for="input-audio-devices" class="col-form-label">Input Audio Devices:</label>
-                    <select id="input-audio-devices" class="custom-select"></select>
-                    <button id="btn-set-input-audio-device" class="btn btn-info" type="button" disabled>Set</button>
-                </div>
-        
-                <!-- Output Audio Devices -->
-                <div class="d-grid gap-2 border-top mt-3 hide-safari">
-                    <label for="output-audio-devices" class="col-form-label">Output Audio Devices:</label>
-                    <select id="output-audio-devices" class="custom-select"></select>
-                    <button id="btn-set-output-audio-device" class="btn btn-info" type="button" disabled>Set</button>
-                </div>
+            <!-- Video Devices -->
+            <div class="d-grid gap-2 border-top mt-3 hide-for-demo">
+                <label for="video-devices" class="col-form-label">Video Devices:</label>
+                <select id="video-devices" class="custom-select"></select>
+                <button id="btn-set-video-device" class="btn btn-info" type="button" title="Set" disabled>Set</button>
+            </div>
+    
+            <!-- Input Audio Devices -->
+            <div class="d-grid gap-2 border-top mt-3">
+                <label for="input-audio-devices" class="col-form-label">Input Audio Devices:</label>
+                <select id="input-audio-devices" class="custom-select"></select>
+                <button id="btn-set-input-audio-device" class="btn btn-info" type="button" title="Set" disabled>Set</button>
+            </div>
+    
+            <!-- Output Audio Devices -->
+            <div class="d-grid gap-2 border-top mt-3 hide-safari">
+                <label for="output-audio-devices" class="col-form-label">Output Audio Devices:</label>
+                <select id="output-audio-devices" class="custom-select"></select>
+                <button id="btn-set-output-audio-device" class="btn btn-info" type="button" title="Set" disabled>Set</button>
             </div>
         </div>
     </div>
@@ -122,7 +118,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="btn-initialize" type="button" class="btn btn-primary">Initialize the SDK</button>
+                    <button id="btn-initialize" type="button" class="btn btn-primary" title="Initialize the SDK">Initialize the SDK</button>
                 </div>
             </div>
         </div>
@@ -133,7 +129,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Dolby.io Spatial Audio - Invitation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="container">
@@ -148,7 +144,7 @@
                                 </div>
                             </div>
                             <div class="mb-3 d-grid">
-                                <button id="btn-copy-invitation" type="button" class="btn btn-primary">Copy to clipboard</button>
+                                <button id="btn-copy-invitation" type="button" class="btn btn-primary" title="Copy to clipboard">Copy to clipboard</button>
                             </div>
                         </div>
                     </div>
@@ -174,7 +170,7 @@
                                     <img src="images/earphone.png" style="height: 96px;">
                                 </div>
                                 <div class="mb-3 d-grid">
-                                    <button id="btn-demo" type="button" class="btn btn-primary">Join demo</button>
+                                    <button id="btn-demo" type="button" class="btn btn-primary" title="Join demo">Join demo</button>
                                 </div>
                             </div>
                             <div class="col">
@@ -187,7 +183,7 @@
                                     <input id="input-username" type="text" class="form-control" placeholder="Your name">
                                 </div>
                                 <div class="mb-3 d-grid">
-                                    <button id="btn-join" type="button" class="btn btn-primary">Join conference</button>
+                                    <button id="btn-join" type="button" class="btn btn-primary" title="Join conference">Join conference</button>
                                 </div>
                             </div>
                         </div>
@@ -200,7 +196,7 @@
     <div id="toasts" class="toast-container position-absolute p-3 top-0 end-0"></div>
 
     <script id="user-template" type="text/x-jsrender">
-        <div id="user-{{:participantId}}-container" class="user-container">
+        <div id="user-{{:participantId}}-container" class="user-container {{:localCss}}">
             <div class="text-center video-container {{:color}}">
                 <img src="{{:avatarUrl}}">
             </div>
@@ -220,30 +216,25 @@
     </script>
 
     <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"></script>
+        src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+        crossorigin="anonymous"></script>
     <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"
-        integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"></script>
+        src="https://cdn.jsdelivr.net/npm/jquery-ui@1.13.2/dist/jquery-ui.min.js"
+        integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0="
+        crossorigin="anonymous"></script>
     <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"
-        integrity="sha512-0bEtK0USNd96MnO4XhH8jhv3nyRF0eK87pJke6pkYf3cM0uDIhNJy9ltuzqgypoIFXw3JSuiy04tVk4AjpZdZw=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"></script>
+        src="https://cdn.jsdelivr.net/npm/jquery-ui-touch-punch@0.2.3/jquery.ui.touch-punch.min.js"
+        integrity="sha256-AAhU14J4Gv8bFupUUcHaPQfvrdNauRHMt+S4UVcaJb0="
+        crossorigin="anonymous"></script>
     <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.2/js/bootstrap.min.js"
-        integrity="sha512-HSNvqjhsAxRPvbSBEdXWlkR9uYmJtUvXEyfAvUzlA0uS5SyFZMZdczgz8oPWTz2NUEBaXkIYL4kdrBJkP66jYA=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"></script>
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha256-m81NDyncZVbr7v9E6qCWXwx/cwjuWDlHCMzi9pjMobA="
+        crossorigin="anonymous"></script>
     <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/1.0.11/jsrender.min.js"
-        integrity="sha512-bKlNlbTH3duwZ28zoqEhXui/yuaPuQVci6OAVu0zh2WfYbEKD39HszVR8byP4/L4YyBo3b5CGIY+4ldVN93uCg=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"></script>
+        src="https://cdn.jsdelivr.net/npm/jsrender@1.0.12/jsrender.min.js"
+        integrity="sha256-jPOjq7JR0WiwIaoqUukCLj1UM44C1i0XuBoL2mhJB4w="
+        crossorigin="anonymous"></script>
     <script type="text/javascript" src="scripts/utils.js"></script>
     <script type="text/javascript" src="scripts/modals.js"></script>
     <script type="text/javascript" src="scripts/actions.js"></script>
