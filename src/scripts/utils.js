@@ -31,7 +31,7 @@ const getRandomIsSpeakingColor = () => {
  * @returns `true` if the participant is connected, `false` otherwise.
  */
 const isConnected = (participant) => {
-    return [ 'Decline', 'Error', 'Kicked', 'Left' ].indexOf(participant.status) < 0;
+    return [ 'Connected', 'Inactive', 'Warning' ].indexOf(participant.status) >= 0;
 };
 
 /**
