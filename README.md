@@ -1,3 +1,6 @@
+[![Deploy to Github Pages](https://github.com/dolbyio-samples/dolbyio-spatial-audio-demo-web/actions/workflows/deploy-to-gh-pages.yml/badge.svg)](https://github.com/dolbyio-samples/dolbyio-spatial-audio-demo-web/actions/workflows/deploy-to-gh-pages.yml)
+[![License](https://img.shields.io/github/license/dolbyio-samples/dolbyio-spatial-audio-demo-web)](LICENSE)
+
 # Communications APIs - Spatial Audio for Web SDK
 
 This sample application allows you to demonstrate how Spatial Audio works.
