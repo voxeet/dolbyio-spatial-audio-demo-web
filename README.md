@@ -16,8 +16,6 @@ This sample application is using the following Open Source projects:
 - [JsRender](https://www.jsviews.com/)
 - [JQuery](https://jquery.com)
 - [JQuery UI Touch Punch](https://github.com/furf/jquery-ui-touch-punch)
-- [Express](https://expressjs.com/)
-- [Dolby.io SDK extensions](https://github.com/DolbyIO/comms-sdk-web-extensions)
 
 ## Avatar images
 
