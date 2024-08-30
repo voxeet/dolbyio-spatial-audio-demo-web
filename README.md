@@ -1,3 +1,5 @@
+# :warning: This repository is no longer maintained :warning:
+
 [![Deploy to Github Pages](https://github.com/dolbyio-samples/dolbyio-spatial-audio-demo-web/actions/workflows/deploy-to-gh-pages.yml/badge.svg)](https://github.com/dolbyio-samples/dolbyio-spatial-audio-demo-web/actions/workflows/deploy-to-gh-pages.yml)
 [![License](https://img.shields.io/github/license/dolbyio-samples/dolbyio-spatial-audio-demo-web)](LICENSE)
 
